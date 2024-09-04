@@ -1,10 +1,23 @@
 function passa_baixas(imagem)
   [rows, cols] = size(imread(imagem));
-  [X, Y] = meshgrid(1:cols, 1:rows);
+
   centro_x = cols / 2;
   centro_y = rows / 2;
-  raio = 50; % Raio da região passa-baixas
-  distancia = sqrt((X - centro_x).^2 + (Y - centro_y).^2);
-  mascara = distancia <= raio; % Mantém apenas as frequências baixas
-  filtra_freq(imagem, mascara);
+  raio = 50;
+
+  mascara = zeros(rows, cols);
+  for y = 1:rows
+    for x = 1:cols
+      distancia = sqrt((x - centro_x)^2 + (y - centro_y)^2);
+      if distancia <= raio
+        mascara(y, x) = 1;
+      end
+    end
+  end
+
+  figure;
+  imshow(mascara, []);
+  title('Máscara Passa-Baixas');
+
+  filtra(imagem, mascara);
 end
