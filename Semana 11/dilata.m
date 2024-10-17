@@ -1,7 +1,7 @@
-function img_erodida = erosao(imagem_bin, ES)
+function img_dilatada = dilata(imagem_bin, ES)
     if ischar(imagem_bin)
         img_gray = imread(imagem_bin);
-        threshold = 0.3;
+        threshold = 0.4;
         imagem_bin = im2bw(img_gray, threshold);
     end
 
@@ -12,7 +12,7 @@ function img_erodida = erosao(imagem_bin, ES)
     [m, n] = size(ES);
     origem_ES = floor(size(ES) / 2);
     [linhas, colunas] = size(imagem_bin);
-    img_erodida = false(linhas, colunas);
+    img_dilatada = false(linhas, colunas);
 
     for i = 1:linhas
         for j = 1:colunas
@@ -23,13 +23,14 @@ function img_erodida = erosao(imagem_bin, ES)
 
             if x_start >= 1 && x_end <= linhas && y_start >= 1 && y_end <= colunas
                 regiao = imagem_bin(x_start:x_end, y_start:y_end);
-                if all(regiao(ES == 1))
-                    img_erodida(i, j) = 1;
+                if any(regiao(ES == 1))
+                    img_dilatada(i, j) = 1;
                 end
             end
         end
     end
 
-    output_filename = 'imagem_erodida.png';
-    imwrite(uint8(img_erodida) * 255, output_filename);
+    output_filename = 'imagem_dilatada.png';
+    imwrite(uint8(img_dilatada) * 255, output_filename);
 end
+
